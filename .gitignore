@@ -1,0 +1,14 @@
+# Log fájlok
+*.log
+ti_manager.log
+
+# Adatbázisok
+*.db
+*.sqlite3
+ti_manager.db
+
+# Python gyorsítótárak és környezetek
+__pycache__/
+*.py[cod]
+venv/
+.env
