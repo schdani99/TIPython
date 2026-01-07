@@ -1,0 +1,56 @@
+/* --- ALAP BEÁLLÍTÁSOK --- */
+body {
+    background-color: #1a1a1a; /* Sötétszürke háttér */
+    color: #e0e0e0;            /* Világosszürke szöveg (jobb a szemnek, mint a tiszta fehér) */
+    font-family: Arial, sans-serif;
+}
+
+/* --- CÍMSOROK --- */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff; /* A címsorok legyenek teljesen fehérek */
+}
+
+/* --- INPUT MEZÕK ÉS GOMBOK JAVÍTÁSA --- */
+/* Ez nagyon fontos, mert alapból fehérek lennének fekete szöveggel */
+input[type="text"], 
+input[type="number"], 
+select, 
+textarea {
+    background-color: #333333; /* Sötétebb input háttér */
+    color: #ffffff;            /* Fehér gépelt szöveg */
+    border: 1px solid #555;    /* Szürke keret */
+    padding: 8px;
+    border-radius: 4px;
+}
+
+/* Ha belekattintasz, legyen világosabb a keret */
+input:focus {
+    outline: none;
+    border-color: #4CAF50; /* Zöld keret aktív állapotban */
+}
+
+/* --- CHECKBOXOK ÉS LISTÁK --- */
+/* A draft oldalon a nevek, amik nem látszottak */
+label {
+    color: #f0f0f0; /* Legyen világos a jelölõnégyzet melletti név */
+    cursor: pointer;
+}
+
+/* --- TÁBLÁZATOK VAGY KÁRTYÁK --- */
+/* Ha vannak dobozaid, azoknak legyen kicsit más a háttere */
+.card, .box, .container {
+    background-color: #252525;
+    border: 1px solid #444;
+    color: #ddd;
+}
+
+/* --- LINKEK --- */
+/* A kék link nem látszik jól feketén, legyen inkább világoskék vagy narancs */
+a {
+    color: #4da6ff; /* Világoskék */
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+    color: #80c1ff;
+}

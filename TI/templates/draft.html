@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4 text-center text-warning">Aktuális Sorsolás</h2>
+
+<div class="row justify-content-center">
+        {% for p in participants %}
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow border-0 bg-transparent">
+                <div class="card-header text-center border-0 rounded-top"
+                     style="background: linear-gradient(45deg, #1a1a1a, #2c2c2c); border-bottom: 1px solid #444;">
+                    <h4 class="m-0 fw-bold text-white" style="letter-spacing: 1px;">{{ p.player_name }}</h4>
+                </div>
+
+                <div class="card-body bg-dark rounded-bottom p-3">
+                    <div class="d-grid gap-3">
+                        {% for faction in p.options %}
+                            {% set is_selected = (p.selected_faction_id == faction.id) %}
+
+                            <a href="/select_faction/{{ p.id }}/{{ faction.id }}"
+                               class="btn position-relative p-0 overflow-hidden text-start"
+                               style="
+                                  height: 80px;
+                                    border: {% if is_selected %}2px solid #ffc107{% else %}1px solid #555{% endif %};
+                                    transition: all 0.3s ease;
+                                    background-color: #222;
+                                    background-image: url('{{ url_for('static', filename='images/' + (faction.name|slugify_faction) + '.jpg') }}');
+                                    background-size: cover;
+                                    background-position: center;
+                                    {% if is_selected %}
+                                        box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
+                                        transform: scale(1.02);
+                                    {% endif %}
+                               ">
+
+                                <div style="
+                                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                                    background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 100%);
+                                    z-index: 1;
+                                "></div>
+
+                                <div class="position-relative d-flex align-items-center h-100 px-3" style="z-index: 2;">
+                                    <span class="fs-5 fw-bold {% if is_selected %}text-warning{% else %}text-light{% endif %}"
+                                          style="text-shadow: 2px 2px 4px #000;">
+                                        {{ faction.name }}
+                                    </span>
+
+                                    {% if is_selected %}
+                                        <span class="ms-auto fs-3 text-warning">
+                                            &#10003;
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+<div class="row mt-5 mb-5">
+    <div class="col-12 text-center">
+        <hr class="text-secondary">
+        <p class="text-muted">Ha mindenki választott, kattints a véglegesítésre:</p>
+        <a href="/finalize_game" class="btn btn-success btn-lg w-100 p-3 fw-bold">
+            JÁTÉK VÉGLEGESÍTÉSE & MENTÉSE
+        </a>
+    </div>
+</div>
+{% endblock %}

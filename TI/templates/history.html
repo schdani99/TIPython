@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Előzmények</h2>
+    <button type="button" class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#addGameModal">
+        + KÉZI HOZZÁADÁS
+    </button>
+</div>
+
+{% for game in games %}
+    <div class="card mb-3 position-relative">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>
+                <strong>#{{ game.id }}</strong> | Dátum: {{ game.date.strftime('%Y-%m-%d %H:%M') }}
+            </span>
+
+            <form action="/delete_game/{{ game.id }}" method="POST" onsubmit="return confirm('Biztosan törölni akarod ezt a meccset? Nem visszavonható!');">
+                <button type="submit" class="btn btn-danger btn-sm" style="opacity: 0.8;">
+                    &#128465; Törlés
+                </button>
+            </form>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush bg-dark">
+                {% for p in game.participants %}
+                <li class="list-group-item bg-transparent text-white d-flex justify-content-between align-items-center border-bottom border-secondary">
+                    <div class="d-flex align-items-center">
+                        <a href="/set_winner/{{ game.id }}/{{ p.player.id }}" class="text-decoration-none me-3" title="Kattints, ha ő nyert!">
+                            {% if game.winner_id == p.player.id %}
+                                <span style="font-size: 1.5rem; text-shadow: 0 0 10px #ffc107;">🏆</span>
+                            {% else %}
+                                <span style="font-size: 1.5rem; filter: grayscale(100%); opacity: 0.2; transition: all 0.2s;">🏆</span>
+                            {% endif %}
+                        </a>
+
+                        <span class="fs-5">{{ p.player.name }}</span>
+
+                        {% if game.winner_id == p.player.id %}
+                            <span class="badge bg-warning text-dark ms-2">GYŐZTES</span>
+                        {% endif %}
+                    </div>
+
+                    <span class="text-warning fw-bold">
+                        {% if p.selected_faction %}
+                            {{ p.selected_faction.name }}
+                        {% else %}
+                            <span class="text-muted">Nincs választva</span>
+                        {% endif %}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-info text-center">Még nincsenek rögzített játékok.</div>
+{% endfor %}
+
+
+<div class="modal fade" id="addGameModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <div class="modal-content" style="background-color: #222; color: #fff; border: 1px solid #ffc107;">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-warning">Régi / Kézi meccs rögzítése</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/add_manual_game" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Mikor volt a meccs?</label>
+                        <input type="date" name="game_date" class="form-control" style="background: #333; color: white; border: 1px solid #555;">
+                        <div class="form-text text-muted">Ha üresen hagyod, a mai dátum lesz.</div>
+                    </div>
+
+                    <hr class="border-secondary">
+                    <h6>Játékosok és Frakciók (Töltsd ki, aki játszott)</h6>
+
+                    {% for i in range(1, 9) %}
+                    <div class="row mb-2 align-items-center">
+                        <div class="col-1 text-secondary">{{ i }}.</div>
+                        <div class="col-5">
+                            <select name="player_{{ i }}" class="form-select form-select-sm bg-dark text-light border-secondary">
+                                <option value="">-- Játékos választása --</option>
+                                {% for player in players %}
+                                    <option value="{{ player.id }}">{{ player.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <select name="faction_{{ i }}" class="form-select form-select-sm bg-dark text-light border-secondary">
+                                <option value="">-- Faj választása --</option>
+                                {% for faction in factions %}
+                                    <option value="{{ faction.id }}">{{ faction.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                    <button type="submit" class="btn btn-warning fw-bold">MENTÉS HOZZÁADÁSA</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

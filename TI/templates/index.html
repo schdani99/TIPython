@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <h3>Új Játékos</h3>
+        <form action="/add_player" method="POST" class="d-flex gap-2 mb-4">
+            <input type="text" name="name" class="form-control" placeholder="Név" required>
+            <button type="submit" class="btn btn-primary">Hozzáadás</button>
+        </form>
+
+        <h3>Draft Indítása</h3>
+        <form action="/start_draft" method="POST">
+            <div class="card p-3 mb-3">
+                <h5>Kik játszanak?</h5>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    {% for player in players %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="player_ids" value="{{ player.id }}" id="p{{ player.id }}">
+                        <label class="form-check-label" for="p{{ player.id }}">
+                            {{ player.name }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100 p-3">SORSOLÁS INDÍTÁSA</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
